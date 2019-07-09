@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
-import os
 import sys
-import argparse
-import rpmUtils
 from customize.centos7.builder import Builder
 
 def usage():
@@ -11,8 +8,6 @@ def usage():
     cmd = './build-tool'
     print('usage: %s action [options]' % cmd)
     print('  for show help : %s help' % cmd)
-    print('  run unit test : %s ut' % cmd)
-    print('  run code line : %s lint' % cmd)
     print('  for build image: %s build <project-directory> [options]' % cmd)
     print('  for show build options: %s list-options' % cmd)
     exit(1)
