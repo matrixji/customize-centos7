@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -e
+workdir=$(pwd $(cd $(dirname $0)))
+
+# install toolchain
+if [ ! -f ${workdir}/build/.toolchain ] ; then
+    sh ${workdir}/scripts/prepare_toolchain.sh ${workdir}
+    touch ${workdir}/build/.toolchain
+fi
+
+export PYTHONPATH=${workdir}/scripts/python-libs
+
+if [ "lint" == "$1" ] ; then
+    ${workdir}/build/.python/bin/python3 -m pip install -q pylint
+    ${workdir}/build/.python/bin/python3 -m pylint \
+        ${workdir}/scripts/build.py
+elif [ "ut" == "$1" ] ; then
+    ${workdir}/build/.python/bin/python3 -m pip install -q pytest
+    ${workdir}/build/.python/bin/python3 -m pytest .
+else
+    # redirect to build.py
+    ${workdir}/build/.python/bin/python3 ${workdir}/scripts/build.py $@
+fi
+
+
