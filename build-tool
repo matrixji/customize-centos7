@@ -14,7 +14,8 @@ export PYTHONPATH=${workdir}/scripts/python-libs
 if [ "lint" == "$1" ] ; then
     ${workdir}/build/.python/bin/python3 -m pip install -q pylint
     ${workdir}/build/.python/bin/python3 -m pylint \
-        ${workdir}/scripts/build.py
+        ${workdir}/scripts/build.py \
+        ${workdir}/scripts/python-libs/*
 elif [ "ut" == "$1" ] ; then
     ${workdir}/build/.python/bin/python3 -m pip install -q pytest
     ${workdir}/build/.python/bin/python3 -m pytest .
