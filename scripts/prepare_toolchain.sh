@@ -13,11 +13,13 @@ os="unknown"
 if [ -f /etc/redhat-release ] ; then
     if grep -q 'CentOS Linux release 7' /etc/redhat-release ; then
         os="centos7"
+    elif grep -q 'Fedora release 30' /etc/redhat-release ; then
+        os="fedora30"
     fi
 fi
 
 if [ "$os" == "unknown" ] ; then
-    print "Not support os for building"
+    echo "Not support os for building"
     exit 1
 fi
 
@@ -26,6 +28,10 @@ if [ "$os" == "centos7" ] ; then
     sudo yum -y install python36 python36-pip python36-devel python36-virtualenv
 
     virtualenv=virtualenv-3.6
+    python=${python_dir}/bin/python3
+elif [ "$os" == "fedora30" ] ; then
+    sudo yum -y install python3 python3-pip python3-devel python3-virtualenv
+    virtualenv=virtualenv
     python=${python_dir}/bin/python3
 fi
 
