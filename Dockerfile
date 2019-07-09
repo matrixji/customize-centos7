@@ -1,0 +1,12 @@
+FROM centos:7
+
+
+#RUN yum -y install epel-release
+RUN yum -y install wget
+RUN wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
+
+RUN yum -y install python36 python36-pip python36-devel python36-pyYAML python36-rpm
+
+COPY . /src
+
+ENTRYPOINT /src/build-tool
