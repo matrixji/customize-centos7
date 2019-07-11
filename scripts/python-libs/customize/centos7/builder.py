@@ -72,6 +72,8 @@ class Builder():
         self.sequence(*shell("""
             mkdir -pv %(cache_dir)s/etc/yum.repos.d
             rm -fr %(cache_dir)s/etc/yum.repos.d/*
+            rm -fr %(cache_dir)s/var
+            yum clean all
         """ % data))
 
         repos = self.cfg.get('yum.repos')
@@ -116,13 +118,13 @@ class Builder():
         self.sequence(*shell('mkdir -pv %(rpm_download_dir)s' % data))
         self.sequence(*shell('rm -fr %(rpm_download_dir)s/*.tmp' % data))
         for rpm in all_packages:
-            cmd = 'yum -y install --releasever=7'
+            cmd = 'yum -y install --releasever=7 --noplugins'
             cmd += ' --downloadonly --downloaddir={} --installroot={} {}'
             action = sh(cmd.format(data['rpm_download_dir'], data['cache_dir'], rpm))
             action.run()
             if action.error and action.outerr.find('Error: Nothing to do') >= 0:
                 cmd = cmd.replace(' install ', ' reinstall ')
-                action = sh(cmd.format(data['rpm_download_dir'], rpm))
+                action = sh(cmd.format(data['rpm_download_dir'], data['cache_dir'], rpm))
                 action.run()
             if action.error and action.outerr.find('Error: Nothing to do') < 0:
                 self.log.error('Run %s return error: %s', action, action.error)

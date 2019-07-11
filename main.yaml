@@ -38,7 +38,17 @@ yum:
       enabled=1
       gpgcheck=0
 
+    ceph.repo: |
+      [ceph]
+      name=Ceph
+      baseurl=https://mirrors.aliyun.com/ceph/rpm-luminous/el7/x86_64/
+      enabled=1
+      gpgcheck=0
+
 install-packages:
   devel-tools:
     - gcc
     - gdb
+    - net-tools
+  ceph:
+    - ceph
