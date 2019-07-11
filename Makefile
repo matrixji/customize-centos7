@@ -3,7 +3,7 @@ IMAGE=customize-centos7
 all: build
 
 docker_image:
-	docker build -q -t $(IMAGE) .
+	sudo docker build  -t $(IMAGE) dockers/build
 
 ut: docker_image
 	docker run --rm -v$(shell pwd):/src -e PYTHONPATH=/src/scripts/python-libs $(IMAGE) \
@@ -16,6 +16,9 @@ lint: docker_image
 build: docker_image
 	docker run --rm -v$(shell pwd):/src -e PYTHONPATH=/src/scripts/python-libs $(IMAGE) \
 		python3 /src/scripts/build.py build /src
+
+localbuild:
+	PYTHONPATH=scripts/python-libs python3 scripts/build.py build .
 
 .PHONY: docker_image
 

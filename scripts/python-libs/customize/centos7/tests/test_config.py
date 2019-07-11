@@ -26,7 +26,7 @@ def test_load_from_project(project):
 ---
 foo: 1
 bar: 2
-tom: ["a", b, c]
+tom: ['a', b, c]
         ''')
     cfg = Config(project.root, [])
     assert cfg.get('foo') == 1
@@ -36,7 +36,7 @@ def test_load_from_non_project(project):
         Config(project.root, [])
 
 
-@pytest.mark.parametrize("args, key, val", (
+@pytest.mark.parametrize('args, key, val', (
     (['--foo', '1'], 'foo', 1),
     (['--foo', '1'], 'bar', None),
     (['--foo=1'], 'foo', 1),
@@ -47,7 +47,7 @@ def test_load_from_args(args, key, val):
     cfg = Config('-', args)
     assert cfg.get(key) == val
 
-@pytest.mark.parametrize("args", (
+@pytest.mark.parametrize('args', (
     ['foo', '1'],
     ['-foo', '1'],
     ['-foo=1'],
@@ -57,7 +57,7 @@ def test_load_from_invalid_args(args):
         Config('-', args)
 
 
-@pytest.mark.parametrize("args, output", (
+@pytest.mark.parametrize('args, output', (
     (['--foo', '1'], ['--foo', '1']),
     (['--foo=1'], ['--foo', '1']),
     (['--foo=1', 'x'], ['--foo', '1', 'x']),
@@ -66,7 +66,7 @@ def test_load_from_invalid_args(args):
 def test_format_args(args, output):
     assert Config._format_args(args) == output
 
-@pytest.mark.parametrize("args, fmt, pattern", (
+@pytest.mark.parametrize('args, fmt, pattern', (
     (['--foo', '1'], 'yaml', 'foo: 1'),
     (['--foo', '1'], 'json', '"foo": 1'),
 ))
