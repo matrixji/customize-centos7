@@ -11,8 +11,6 @@ class Action(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
         self.error = None
-        self.output = ''
-        self.outerr = ''
 
     def run(self):
         raise NotImplementedError()
@@ -25,10 +23,8 @@ class ShellCommand(Action):
         self.fp = None
 
     def run(self):
-        self.fp = Popen(self.cmd, shell=True, stdout=PIPE, stderr=PIPE, preexec_fn=setsid)
-        output, outerr = self.fp.communicate(timeout=self.timeout)
-        self.output = output.decode('utf-8')
-        self.outerr = outerr.decode('utf-8')
+        self.fp = Popen(self.cmd, shell=True, preexec_fn=setsid)
+        self.fp.communicate(timeout=self.timeout)
         if self.fp.returncode != 0:
             self.error = 'Error: {}'.format(self.fp.returncode)
 

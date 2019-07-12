@@ -101,37 +101,36 @@ class Builder():
                 break
 
         core_package_list = []
-        all_packages = set()
+        all_packages = dict()
         package_list_node = core_group.getElementsByTagName('packagelist')[0]
         for pkg_req in package_list_node.getElementsByTagName('packagereq'):
             pkg_name = pkg_req.firstChild.nodeValue
             core_package_list.append(pkg_name)
-            all_packages.add(pkg_name)
+            all_packages[pkg_name] = pkg_name
 
         other_package_list = []
         groups = self.cfg.get('install-packages')
         for _, pkgs in groups.items():
             for pkg in pkgs:
-                other_package_list.append(pkg)
-                all_packages.add(pkg)
+                pkg_name = pkg
+                if pkg_name.find('.') > 0:
+                    pkg_words = pkg_name.split('-')
+                    if len(pkg_words) > 2:
+                        pkg_name = '-'.join(pkg_words[:-2])
+                other_package_list.append(pkg_name)
+                all_packages[pkg_name] = pkg
 
         self.sequence(*shell('mkdir -pv %(rpm_download_dir)s' % data))
         self.sequence(*shell('rm -fr %(rpm_download_dir)s/*.tmp' % data))
-        for rpm in all_packages:
-            cmd = 'yum -y install --releasever=7 --noplugins'
-            cmd += ' --downloadonly --downloaddir={} --installroot={} {}'
-            action = sh(cmd.format(data['rpm_download_dir'], data['cache_dir'], rpm))
-            action.run()
-            if action.error and action.outerr.find('Error: Nothing to do') >= 0:
-                cmd = cmd.replace(' install ', ' reinstall ')
-                action = sh(cmd.format(data['rpm_download_dir'], data['cache_dir'], rpm))
-                action.run()
-            if action.error and action.outerr.find('Error: Nothing to do') < 0:
-                self.log.error('Run %s return error: %s', action, action.error)
-                self.log.info('%s, stdout: %s', action, action.output)
-                self.log.info('%s, stderr: %s', action, action.outerr)
-                exit(1)
-            self.log.info('Download rpm: %s success', rpm)
+        all_packages = ' '.join(all_packages.values())
+        cmd = 'yum -y install --releasever=7 --noplugins'
+        cmd += ' --downloadonly --downloaddir={} --installroot={} {}'
+        action = sh(cmd.format(data['rpm_download_dir'], data['cache_dir'], all_packages))
+        action.run()
+        if action.error:
+            self.log.error('Run %s return error: %s', action, action.error)
+            exit(1)
+        self.log.info('Download rpm: %s success', all_packages)
 
         # generate groups.xml
         # now rpms should download
@@ -230,8 +229,6 @@ class Builder():
                 self.log.error('Run %s return error: %s', action, action.error)
             else:
                 self.log.info('Run %s return success', action)
-            self.log.info('%s, stdout: %s', action, action.output)
-            self.log.info('%s, stderr: %s', action, action.outerr)
             if action.error:
                 exit(1)
 
@@ -250,8 +247,6 @@ class Builder():
                         self.log.error('Run %s return error: %s', action, action.error)
                     else:
                         self.log.info('Run %s return success', action)
-                    self.log.info('%s, stdout: %s', action, action.output)
-                    self.log.info('%s, stderr: %s', action, action.outerr)
                     if has_error:
                         break
                 else:
