@@ -37,5 +37,8 @@ build: docker_image
 		python3 /src/scripts/build.py build /src
 
 
-.PHONY: docker_image
+clean:
+	rm -fr *.iso build
+
+.PHONY: docker_image clean
 

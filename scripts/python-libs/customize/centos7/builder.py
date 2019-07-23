@@ -207,7 +207,8 @@ class Builder():
         """ % data))
 
         # iso
-        isoname = '%(os_name)s-%(os_version)s.iso' % data
+        data['ts'] = datetime.now().strftime('%m%d%H%M')
+        isoname = '%(os_name)s-%(os_version)s-%(ts)s.iso' % data
         isopath = path.join(data['project_dir'], isoname)
         cmd = 'mkisofs -joliet-long -T -o ' + isopath
         cmd += ' -V ' + data['os_name'].upper() + '_' + str(data['os_version'])

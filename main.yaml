@@ -76,6 +76,11 @@ yum:
       gpgkey=https://download.docker.com/linux/centos/gpg
 
 install-packages:
+  kernel:
+    - kernel
+    - kernel-devel
+    - kernel-headers
+    - kernel-tools
   extra:
     - bash-completion
     - dos2unix
@@ -123,23 +128,7 @@ install-packages:
     - ntp
     - ntpdate
     - zlib-devel
-  ceph: # example force ceph using 12.2.8, not recomanded
-    - ceph-base-12.2.8-0.el7.x86_64
-    - ceph-common-12.2.8-0.el7.x86_64
-    - ceph-fuse-12.2.8-0.el7.x86_64
-    - ceph-mds-12.2.8-0.el7.x86_64
-    - ceph-mgr-12.2.8-0.el7.x86_64
-    - ceph-mon-12.2.8-0.el7.x86_64
-    - ceph-osd-12.2.8-0.el7.x86_64
-    - ceph-selinux-12.2.8-0.el7.x86_64
-    - libcephfs2-12.2.8-0.el7.x86_64
-    - librados2-12.2.8-0.el7.x86_64
-    - libradosstriper1-12.2.8-0.el7.x86_64
-    - librbd1-12.2.8-0.el7.x86_64
-    - librgw2-12.2.8-0.el7.x86_64
-    - python-cephfs-12.2.8-0.el7.x86_64
-    - python-rados-12.2.8-0.el7.x86_64
-    - python-rbd-12.2.8-0.el7.x86_64
-    - python-rgw-12.2.8-0.el7.x86_64
+  ceph:
+    - ceph
   docker-runtime:
     - nvidia-docker2
