@@ -1,5 +1,5 @@
 ---
-name: MyCent
+name: Weiyun
 version: 0.1
 
 yum:
@@ -132,3 +132,5 @@ install-packages:
     - ceph
   docker-runtime:
     - nvidia-docker2
+  ansible:
+    - ansible
