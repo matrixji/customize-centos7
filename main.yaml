@@ -1,6 +1,6 @@
 ---
 name: Weiyun
-version: 0.1
+version: 0.3
 
 yum:
   os-online: https://mirrors.aliyun.com/centos/7/os/x86_64/
@@ -83,31 +83,42 @@ install-packages:
     - kernel-tools
   extra:
     - bash-completion
+    - bzip2
     - dos2unix
     - file
     - gettext
     - grub2
     - grub2-common
+    - grub2-efi-x64
     - grub2-pc
     - grub2-pc-modules
     - grub2-tools
     - grub2-tools-extra
     - grub2-tools-minimal
+    - iperf
+    - iptraf-ng
     - jq
     - keyutils
     - stress
+    - tcpdump
     - telnet
     - wget
+    - xz
   devel-tools:
     - python-devel
     - python2-pip
+    - python36
+    - python36-devel
     - make
     - git
     - gcc
+    - gcc-c++
     - gdb
     - vim
     - net-tools
     - sysstat
+    - htop
+    - atop
     - strace
     - iftop
     - lrzsz
@@ -130,7 +141,11 @@ install-packages:
     - zlib-devel
   ceph:
     - ceph
+    - ceph-fuse
+    - ceph-deploy
   docker-runtime:
     - nvidia-docker2
-  ansible:
-    - ansible
+  keepalived:
+    - keepalived
+  haproxy:
+    - haproxy
